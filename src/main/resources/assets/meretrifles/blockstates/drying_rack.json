@@ -1,0 +1,22 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "meretrifles:drying_rack"
+    },
+    "variants": {
+        "on_wall": {
+            "true": {
+                "model": "meretrifles:drying_rack_wall"
+            },
+            "false": {}
+        },
+        "facing": {
+            "north": { "y": 0 },
+            "east":  { "y": 90 },
+            "south": { "y": 180 },
+            "west":  { "y": 270 }
+        },
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}

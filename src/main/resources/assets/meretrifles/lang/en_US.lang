@@ -1,0 +1,8 @@
+# Items
+item.meretrifles.sextant.name=Sextant
+
+# Blocks
+tile.meretrifles.drying_rack.name=Drying Rack
+
+# Misc
+itemGroup.meretrifles=Mere Trifles
