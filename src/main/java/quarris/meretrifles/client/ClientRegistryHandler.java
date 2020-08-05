@@ -2,23 +2,18 @@ package quarris.meretrifles.client;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.tileentity.TileEntitySignRenderer;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import quarris.meretrifles.MereTrifles;
-import quarris.meretrifles.RegistryHandler;
-import quarris.meretrifles.blocks.ModBlocks;
+import quarris.meretrifles.registry.RegistryHandler;
 import quarris.meretrifles.blocks.tiles.TileDryingRack;
 import quarris.meretrifles.client.renderer.TileRendererDryingRack;
-import quarris.meretrifles.helper.BlockRegistryObject;
-import quarris.meretrifles.items.ModItems;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = MereTrifles.MODID)

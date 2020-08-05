@@ -1,4 +1,4 @@
-package quarris.meretrifles.helper;
+package quarris.meretrifles.api.helper;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;

@@ -1,4 +1,4 @@
-package quarris.meretrifles;
+package quarris.meretrifles.registry;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -8,6 +8,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import quarris.meretrifles.MereTrifles;
 import quarris.meretrifles.blocks.BlockDryingRack;
 import quarris.meretrifles.blocks.ModBlocks;
 import quarris.meretrifles.blocks.tiles.TileDryingRack;

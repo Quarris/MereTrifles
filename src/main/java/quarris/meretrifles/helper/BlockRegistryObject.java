@@ -5,7 +5,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import quarris.meretrifles.MereTrifles;
-import quarris.meretrifles.RegistryHandler;
+import quarris.meretrifles.registry.RegistryHandler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -39,7 +39,7 @@ public class BlockRegistryObject {
         try {
             SET_SOUND_TYPE.invoke(this.block, sound);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            MereTrifles.logger.warn("Could not set sound for " + this.block);
+            MereTrifles.LOGGER.warn("Could not set sound for " + this.block);
         }
         return this;
     }

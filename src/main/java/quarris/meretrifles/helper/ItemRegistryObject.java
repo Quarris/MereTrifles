@@ -1,12 +1,9 @@
 package quarris.meretrifles.helper;
 
-import net.minecraft.block.SoundType;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import quarris.meretrifles.MereTrifles;
-import quarris.meretrifles.RegistryHandler;
-
-import java.lang.reflect.InvocationTargetException;
+import quarris.meretrifles.registry.RegistryHandler;
 
 public class ItemRegistryObject {
 
