@@ -2,20 +2,17 @@ package quarris.meretrifles.blocks.tiles;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.server.management.PlayerChunkMapEntry;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ITickable;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.items.ItemStackHandler;
+import quarris.meretrifles.api.recipe.RecipeDryingRack;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-public class TileDryingRack extends TileEntity implements ITickable {
+public class TileDryingRack extends TickableTile {
 
     private ItemStackHandler inventory;
+
+    private RecipeDryingRack recipe;
+    private int ticks;
 
     public TileDryingRack() {
         this.inventory = new ItemStackHandler(1) {
@@ -32,74 +29,59 @@ public class TileDryingRack extends TileEntity implements ITickable {
     }
 
     @Override
-    public void update() {
+    public void update(long elapsed) {
+        if (this.world.isRemote) {
+            if (this.ticks > 0)
+                this.tickTime(elapsed);
+            return;
+        }
+
+        ItemStack slot = this.getInventory().getStackInSlot(0);
+
+        if (slot.isEmpty()) {
+            if (this.recipe != null) {
+                this.recipe = null;
+                this.ticks = 0;
+            }
+            return;
+        }
+
+        if (this.recipe == null) {
+            this.recipe = RecipeDryingRack.fromInput(slot);
+            this.ticks = this.recipe.time;
+        }
+
+        this.tickTime(elapsed);
+
+        if (this.ticks == 0) {
+            this.getInventory().setStackInSlot(0, this.recipe.output.copy());
+            this.recipe = null;
+            this.sendToClients();
+        }
     }
 
     public ItemStackHandler getInventory() {
         return this.inventory;
     }
 
-    @Nullable
-    @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        return new SPacketUpdateTileEntity(this.pos, 0, this.writeToNBT(new NBTTagCompound()));
-    }
-
-    @Override
-    public NBTTagCompound getUpdateTag() {
-        return this.writeToNBT(new NBTTagCompound());
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-        this.readFromNBT(pkt.getNbtCompound());
-    }
-
-    @Override
-    public void handleUpdateTag(NBTTagCompound tag) {
-        this.readFromNBT(tag);
-    }
-
-    public void sendToClients() {
-        if (!world.isRemote) {
-            WorldServer world = (WorldServer) this.getWorld();
-            PlayerChunkMapEntry entry = world.getPlayerChunkMap().getEntry(this.getPos().getX() >> 4, this.getPos().getZ() >> 4);
-            if (entry != null) {
-                entry.sendPacket(this.getUpdatePacket());
-            }
-        }
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
-        this.getInventory().deserializeNBT(compound.getCompoundTag("Inventory"));
+    private void tickTime(long amount) {
+        this.ticks -= amount;
+        if (this.ticks < 0)
+            this.ticks = 0;
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         compound = super.writeToNBT(compound);
         compound.setTag("Inventory", this.getInventory().serializeNBT());
+        compound.setInteger("TicksUsed", this.ticks);
         return compound;
     }
 
-    /*
     @Override
-    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return true;
-        }
-
-        return super.hasCapability(capability, facing);
+    public void readFromNBT(NBTTagCompound compound) {
+        super.readFromNBT(compound);
+        this.getInventory().deserializeNBT(compound.getCompoundTag("Inventory"));
+        this.ticks = compound.getInteger("TicksUsed");
     }
-
-    @Nullable
-    @Override
-    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return (T) this.inventory;
-        }
-        return super.getCapability(capability, facing);
-    }
-    */
 }

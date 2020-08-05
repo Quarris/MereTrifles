@@ -1,6 +1,7 @@
 package quarris.meretrifles;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -10,6 +11,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
+import quarris.meretrifles.api.MereTriflesApi;
 import quarris.meretrifles.blocks.ModBlocks;
 import quarris.meretrifles.client.CompassAngleProperty;
 import quarris.meretrifles.items.ModItems;
@@ -37,6 +39,7 @@ public class MereTrifles {
     }
 
     public MereTrifles() {
+        MereTriflesApi.addDryingRackRecipe(new ItemStack(Blocks.SPONGE, 1, 0), new ItemStack(Blocks.SPONGE, 1, 1), 20 * 20, false);
     }
 
     @EventHandler
