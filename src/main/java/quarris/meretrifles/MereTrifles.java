@@ -10,8 +10,6 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
-import quarris.meretrifles.api.MereTriflesApi;
-import quarris.meretrifles.api.recipe.RecipeDryingRack;
 import quarris.meretrifles.blocks.ModBlocks;
 import quarris.meretrifles.client.CompassAngleProperty;
 import quarris.meretrifles.items.ModItems;
@@ -49,7 +47,6 @@ public class MereTrifles {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         LOGGER = event.getModLog();
-        MereTriflesApi.LOGGER = event.getModLog();
         JsonRecipeLoader.init(new File(event.getModConfigurationDirectory(), "meretrifles"));
         ModBlocks.init();
         ModItems.init();

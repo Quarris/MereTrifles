@@ -1,10 +1,9 @@
 package quarris.meretrifles.blocks.tiles;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.ItemStackHandler;
-import quarris.meretrifles.api.recipe.RecipeDryingRack;
+import quarris.meretrifles.recipe.RecipeDryingRack;
 
 import javax.annotation.Nonnull;
 
@@ -48,17 +47,20 @@ public class TileDryingRack extends TickableTile {
         }
 
         if (this.recipe == null) {
-            this.recipe = RecipeDryingRack.fromInput(slot);
+            this.recipe = RecipeDryingRack.fromInput(this.world, this.pos, slot);
             if (this.recipe == null)
                 return;
 
-            this.ticks = this.recipe.time;
+            this.ticks = this.recipe.getWorkTime();
         }
+
+        if (!this.recipe.canWork(this.world, this.pos))
+            return;
 
         this.tickTime(elapsed);
 
         if (this.ticks == 0) {
-            this.getInventory().setStackInSlot(0, this.recipe.output.copy());
+            this.getInventory().setStackInSlot(0, this.recipe.getOutput());
             this.recipe = null;
             this.sendToClients();
         }

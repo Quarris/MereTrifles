@@ -1,12 +1,10 @@
 package quarris.meretrifles.registry;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import quarris.meretrifles.MereTrifles;
-import quarris.meretrifles.api.recipe.IJsonRecipeLoader;
-import quarris.meretrifles.api.recipe.RecipeDryingRack;
+import quarris.meretrifles.recipe.IJsonRecipeLoader;
+import quarris.meretrifles.recipe.RecipeDryingRack;
 
 import java.io.File;
 import java.io.FileReader;
@@ -32,6 +30,7 @@ public class JsonRecipeLoader {
     }
 
     public static void loadRecipes() {
+        MereTrifles.LOGGER.info("Loading recipes for {}", MereTrifles.NAME);
         File recipesDir = new File(getModDir(), "recipes");
 
         if (!recipesDir.exists()) {
@@ -47,14 +46,20 @@ public class JsonRecipeLoader {
             }
 
             IJsonRecipeLoader loader = entry.getValue();
+            int count = 0;
             for (File recipeFile : recipeDir.listFiles()) {
                 String fileName = recipeFile.getName().replace(".json", "");
                 try {
                     JsonObject json = (JsonObject) JSON_PARSER.parse(new FileReader(recipeFile));
                     loader.load(fileName, json);
+                    count++;
                 } catch (Exception e) {
                     MereTrifles.LOGGER.warn("Could not load recipe '" + fileName + "'", e);
                 }
+            }
+
+            if (count > 0) {
+                MereTrifles.LOGGER.info("   {}: {} recipes", dirName, count);
             }
         }
     }

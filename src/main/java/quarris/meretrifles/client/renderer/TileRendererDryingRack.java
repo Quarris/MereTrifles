@@ -35,8 +35,11 @@ public class TileRendererDryingRack extends TileEntitySpecialRenderer<TileDrying
             EnumFacing facing = state.getValue(BlockDryingRack.FACING);
             boolean onWall = state.getValue(BlockDryingRack.ON_WALL);
             GlStateManager.pushMatrix(); {
-                GlStateManager.translate(x + 0.5, y + 0.5, z + (onWall ? 0.94 : 0.5));
-                GlStateManager.rotate(facing.getHorizontalAngle(), 0, 1, 0);
+                GlStateManager.translate(x + 0.5 , y + 0.5, z + 0.5);
+                GlStateManager.rotate(-facing.getHorizontalAngle(), 0, 1, 0);
+                if (onWall) {
+                    GlStateManager.translate(0, 0, -0.44);
+                }
                 GlStateManager.pushMatrix(); {
                     GlStateManager.translate(-1/32f, -1.465, 0);
                     GlStateManager.scale(1, 1, 0.69d);
