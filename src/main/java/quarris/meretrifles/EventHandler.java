@@ -40,7 +40,7 @@ public class EventHandler {
 
                 }
                 * */
-                event.setCanceled(true);
+                //event.setCanceled(true);
             }
             return;
         }
