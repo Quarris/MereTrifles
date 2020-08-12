@@ -2,13 +2,13 @@
 {
   "modid": "meretrifles",
   "name": "Mere Trifles",
-  "description": "Example placeholder mod.",
+  "description": "Mere Trifles Description",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["LunariusH", "Quarris"],
+  "credits": "",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []

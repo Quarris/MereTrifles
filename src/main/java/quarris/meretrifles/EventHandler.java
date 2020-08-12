@@ -3,6 +3,7 @@ package quarris.meretrifles;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -16,39 +17,34 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import quarris.meretrifles.config.WorldConfig;
 import quarris.meretrifles.items.ModItems;
 
 @Mod.EventBusSubscriber(modid = MereTrifles.MODID)
 public class EventHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void doBucketEventStuff(FillBucketEvent event) {
+    public static void blockFluidPlacement(FillBucketEvent event) {
         if (event.getTarget() == null || event.getTarget().typeOfHit != RayTraceResult.Type.BLOCK) {
             return;
         }
 
-        FluidBucketWrapper bucketFluidHandler = (FluidBucketWrapper) event.getEmptyBucket().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+        FluidBucketWrapper fluidHandler = (FluidBucketWrapper) event.getEmptyBucket().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 
-        FluidStack bucketFluid = bucketFluidHandler.getFluid();
-
-        if (bucketFluid == null) {
-            if (event.getTarget().typeOfHit == RayTraceResult.Type.BLOCK) {
-                World world = event.getWorld();
-                IBlockState blockState = world.getBlockState(event.getTarget().getBlockPos());
-                /* TODO Cancel bucket events based on fluids in the config
-                if (isBlockedViaConfig(blockState)) {
-
-                }
-                * */
-                //event.setCanceled(true);
-            }
+        FluidStack fluid = fluidHandler.getFluid();
+        if (fluid == null || fluid.getFluid() == null)
             return;
-        }
 
-
-        if (event.getEmptyBucket().getItem() == Items.WATER_BUCKET) {
+        ResourceLocation fluidName = fluid.getFluid().getBlock().getRegistryName();
+        System.out.println(fluidName);
+        System.out.println(WorldConfig.rawBlockFluidPlacements);
+        if (WorldConfig.blockFluidPlacements.contains(fluidName))
             event.setCanceled(true);
-        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void blockFluidCollection(FillBucketEvent event) {
+
     }
 
     @SubscribeEvent
