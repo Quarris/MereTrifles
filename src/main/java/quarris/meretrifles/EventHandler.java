@@ -1,19 +1,17 @@
 package quarris.meretrifles;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -35,16 +33,20 @@ public class EventHandler {
         if (fluid == null || fluid.getFluid() == null)
             return;
 
-        ResourceLocation fluidName = fluid.getFluid().getBlock().getRegistryName();
-        System.out.println(fluidName);
-        System.out.println(WorldConfig.rawBlockFluidPlacements);
-        if (WorldConfig.blockFluidPlacements.contains(fluidName))
+        if (WorldConfig.preventFluidPlacement(fluid.getFluid()))
             event.setCanceled(true);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void blockFluidCollection(FillBucketEvent event) {
 
+    }
+
+    @SubscribeEvent
+    public static void fluidStuff(BlockEvent.CreateFluidSourceEvent event) {
+        if (WorldConfig.allowWaterSourceCreation(event.getState(), event.getWorld(), event.getPos())) {
+            event.setResult(Event.Result.DENY);
+        }
     }
 
     @SubscribeEvent

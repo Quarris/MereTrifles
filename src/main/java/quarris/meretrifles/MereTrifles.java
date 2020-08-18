@@ -17,8 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.Logger;
 import quarris.meretrifles.blocks.ModBlocks;
 import quarris.meretrifles.client.CompassAngleProperty;
-import quarris.meretrifles.config.GeneralConfig;
-import quarris.meretrifles.config.WorldConfig;
+import quarris.meretrifles.config.ModConfig;
 import quarris.meretrifles.items.ModItems;
 import quarris.meretrifles.registry.JsonRecipeLoader;
 import quarris.meretrifles.registry.RegistryHandler;
@@ -54,7 +53,7 @@ public class MereTrifles {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         LOGGER = event.getModLog();
-        GeneralConfig.onConfigsChanged();
+        ModConfig.onConfigChanged();
         JsonRecipeLoader.init(new File(event.getModConfigurationDirectory(), "meretrifles"));
         ModBlocks.init();
         ModItems.init();
@@ -71,8 +70,7 @@ public class MereTrifles {
     public void onConfigsChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
         if (MODID.equals(event.getModID())) {
             ConfigManager.sync(MODID, Config.Type.INSTANCE);
-            GeneralConfig.onConfigsChanged();
-            WorldConfig.onConfigsChanged();
+            ModConfig.onConfigChanged();
         }
     }
 
