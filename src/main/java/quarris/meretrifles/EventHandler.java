@@ -48,5 +48,4 @@ public class EventHandler {
             event.setResult(Event.Result.DENY);
         }
     }
-    }
 }
