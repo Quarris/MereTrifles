@@ -1,5 +1,6 @@
 package quarris.meretrifles.blocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
@@ -63,9 +64,24 @@ public class BlockDryingRack extends BlockContainer {
                 .register();
     }
 
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, ON_WALL, FACING);
+    public boolean isOnWall(IBlockState state) {
+        return state.getValue(ON_WALL);
+    }
+
+    public EnumFacing getFacing(IBlockState state) {
+        return state.getValue(FACING);
+    }
+
+    public boolean canStay(World world, BlockPos pos, IBlockState state) {
+        if (this.isOnWall(state)) {
+            EnumFacing facing = this.getFacing(state);
+            BlockPos wallPos = pos.offset(facing.getOpposite());
+            IBlockState wall = world.getBlockState(wallPos);
+            return wall.isSideSolid(world, wallPos, facing);
+        } else {
+            IBlockState floor = world.getBlockState(pos.down());
+            return floor.isSideSolid(world, pos.down(), EnumFacing.UP);
+        }
     }
 
     @Override
@@ -85,6 +101,7 @@ public class BlockDryingRack extends BlockContainer {
         return false;
     }
 
+
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileEntity tile = worldIn.getTileEntity(pos);
@@ -96,11 +113,28 @@ public class BlockDryingRack extends BlockContainer {
             }
         }
         super.breakBlock(worldIn, pos, state);
+    }
 
+    @Override
+    public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side) {
+        return side != EnumFacing.DOWN;
+    }
+
+    @Override
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+        if (!canStay(worldIn, pos, state)) {
+            worldIn.setBlockToAir(pos);
+            this.dropBlockAsItem(worldIn, pos, state, 0);
+        }
     }
 
     public IBlockState getStateFromProps(EnumFacing horizontalFacing, boolean onWall) {
         return this.getDefaultState().withProperty(FACING, horizontalFacing).withProperty(ON_WALL, onWall);
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, ON_WALL, FACING);
     }
 
     @Override
