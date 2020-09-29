@@ -12,6 +12,7 @@ import quarris.meretrifles.MereTrifles;
 import quarris.meretrifles.blocks.BlockDryingRack;
 import quarris.meretrifles.blocks.ModBlocks;
 import quarris.meretrifles.blocks.tiles.TileDryingRack;
+import quarris.meretrifles.blocks.tiles.TileStill;
 import quarris.meretrifles.helper.BlockRegistryObject;
 import quarris.meretrifles.items.ItemSextant;
 import quarris.meretrifles.items.ModItems;
@@ -47,5 +48,6 @@ public class RegistryHandler {
 
     public static void registerTileEntities() {
         GameRegistry.registerTileEntity(TileDryingRack.class, ModBlocks.DRYING_RACK.getRegistryName());
+        GameRegistry.registerTileEntity(TileStill.class, ModBlocks.STILL.getRegistryName());
     }
 }

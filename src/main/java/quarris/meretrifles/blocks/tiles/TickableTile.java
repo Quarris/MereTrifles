@@ -1,7 +1,10 @@
 package quarris.meretrifles.blocks.tiles;
 
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.util.ITickable;
+import net.minecraft.world.WorldServer;
 
 public abstract class TickableTile extends TileBase implements ITickable {
 
@@ -16,7 +19,7 @@ public abstract class TickableTile extends TileBase implements ITickable {
             this.lastTicked = this.world.getTotalWorldTime();
 
         long time = this.world.getTotalWorldTime();
-        long elapsed = time - this.lastTicked;
+        int elapsed = (int)(time - this.lastTicked);
         if (elapsed > 0) {
             this.update(elapsed);
         } else if (elapsed == 0) {
@@ -27,7 +30,7 @@ public abstract class TickableTile extends TileBase implements ITickable {
         this.lastTicked = time;
     }
 
-    public abstract void update(long elapsed);
+    public abstract void update(int elapsed);
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
@@ -40,5 +43,18 @@ public abstract class TickableTile extends TileBase implements ITickable {
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         this.lastTicked = compound.getLong("LastTicked");
+    }
+
+    public void sendToClients() {
+        if (this.world.isRemote)
+            return;
+
+        WorldServer world = (WorldServer) this.getWorld();
+        PlayerChunkMapEntry entry = world.getPlayerChunkMap().getEntry(this.getPos().getX() >> 4, this.getPos().getZ() >> 4);
+
+        if (entry == null) return;
+
+        for (EntityPlayerMP player : entry.getWatchingPlayers())
+            player.connection.sendPacket(this.getUpdatePacket());
     }
 }

@@ -29,14 +29,14 @@ public class TileDryingRack extends TickableTile {
     }
 
     @Override
-    public void update(long elapsed) {
+    public void update(int elapsed) {
         if (this.world.isRemote) {
             if (this.ticks > 0)
                 this.tickTime(elapsed);
             return;
         }
 
-        ItemStack slot = this.getInventory().getStackInSlot(0);
+        ItemStack slot = this.inventory.getStackInSlot(0);
 
         if (slot.isEmpty()) {
             if (this.recipe != null) {
@@ -60,7 +60,7 @@ public class TileDryingRack extends TickableTile {
         this.tickTime(elapsed);
 
         if (this.ticks == 0) {
-            this.getInventory().setStackInSlot(0, this.recipe.getOutput());
+            this.inventory.setStackInSlot(0, this.recipe.getOutput());
             this.recipe = null;
             this.sendToClients();
         }
@@ -70,7 +70,7 @@ public class TileDryingRack extends TickableTile {
         return this.inventory;
     }
 
-    private void tickTime(long amount) {
+    private void tickTime(int amount) {
         this.ticks -= amount;
         if (this.ticks < 0)
             this.ticks = 0;
@@ -79,7 +79,7 @@ public class TileDryingRack extends TickableTile {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         compound = super.writeToNBT(compound);
-        compound.setTag("Inventory", this.getInventory().serializeNBT());
+        compound.setTag("Inventory", this.inventory.serializeNBT());
         compound.setInteger("TicksUsed", this.ticks);
         return compound;
     }
@@ -87,7 +87,7 @@ public class TileDryingRack extends TickableTile {
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        this.getInventory().deserializeNBT(compound.getCompoundTag("Inventory"));
+        this.inventory.deserializeNBT(compound.getCompoundTag("Inventory"));
         this.ticks = compound.getInteger("TicksUsed");
     }
 }

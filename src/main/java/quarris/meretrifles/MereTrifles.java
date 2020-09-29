@@ -3,6 +3,7 @@ package quarris.meretrifles;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
@@ -14,6 +15,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.apache.logging.log4j.Logger;
 import quarris.meretrifles.blocks.ModBlocks;
 import quarris.meretrifles.client.CompassAngleProperty;
@@ -57,6 +59,7 @@ public class MereTrifles {
         JsonRecipeLoader.init(new File(event.getModConfigurationDirectory(), "meretrifles"));
         ModBlocks.init();
         ModItems.init();
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, new ModGuiHandler());
     }
 
     @EventHandler

@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import quarris.meretrifles.MereTrifles;
 import quarris.meretrifles.recipe.IJsonRecipeLoader;
 import quarris.meretrifles.recipe.RecipeDryingRack;
+import quarris.meretrifles.recipe.RecipeStill;
 
 import java.io.File;
 import java.io.FileReader;
@@ -23,6 +24,7 @@ public class JsonRecipeLoader {
         CONFIG_DIR.mkdir();
 
         RECIPES_FILES.put("drying_rack", new RecipeDryingRack.RecipeLoader());
+        RECIPES_FILES.put("still", new RecipeStill.RecipeLoader());
     }
 
     public static File getModDir() {

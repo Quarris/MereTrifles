@@ -1,9 +1,6 @@
 package quarris.meretrifles.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
@@ -29,7 +26,7 @@ import quarris.meretrifles.helper.BlockRegistryObject;
 
 import javax.annotation.Nullable;
 
-public class BlockDryingRack extends BlockContainer {
+public class BlockDryingRack extends BlockContainer implements ITileEntityProvider {
 
     private final AxisAlignedBB SHAPE_NS = new AxisAlignedBB(0, 0, 7 / 16d, 1, 1, 9 / 16d);
     private final AxisAlignedBB SHAPE_WE = new AxisAlignedBB(7 / 16d, 0, 0, 9 / 16d, 1, 1);
