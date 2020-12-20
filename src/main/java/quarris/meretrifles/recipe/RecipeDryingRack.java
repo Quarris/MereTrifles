@@ -1,27 +1,29 @@
 package quarris.meretrifles.recipe;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.google.gson.JsonObject;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fluids.FluidStack;
 import quarris.meretrifles.helper.ItemHelper;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import static net.minecraft.util.JsonUtils.*;
 import static quarris.meretrifles.recipe.IJsonRecipeLoader.*;
 
 public class RecipeDryingRack extends JsonRecipe {
 
-    public static final Map<ItemStack, RecipeDryingRack> RECIPES = new HashMap<>();
+    public static final Set<RecipeDryingRack> RECIPES = new HashSet<>();
 
     public static RecipeDryingRack fromInput(World world, BlockPos pos, ItemStack input) {
-        for (Map.Entry<ItemStack, RecipeDryingRack> entry : RECIPES.entrySet()) {
-            if (entry.getValue().matches(world, pos, input)) {
-                return entry.getValue();
+        for (RecipeDryingRack recipe : RECIPES) {
+            if (recipe.matches(world, pos, input)) {
+                return recipe;
             }
         }
 
@@ -129,7 +131,7 @@ public class RecipeDryingRack extends JsonRecipe {
             boolean blacklistDimensions = getBoolean(json, "blacklistDimensions", dimensions.isEmpty());
 
             RecipeDryingRack recipe = new RecipeDryingRack(fileName, output, input, time, false, needsSky, minLight, maxLight, biomes, blacklistBiomes, minTemp, maxTemp, minHumidity, maxHumidity, minY, maxY, dimensions, blacklistDimensions);
-            RECIPES.put(input, recipe);
+            RECIPES.add(recipe);
             return recipe;
         }
 

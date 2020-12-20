@@ -11,6 +11,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import quarris.meretrifles.MereTrifles;
+import quarris.meretrifles.blocks.tiles.TileTanningTub;
+import quarris.meretrifles.client.renderer.TileRendererTanningTub;
 import quarris.meretrifles.registry.RegistryHandler;
 import quarris.meretrifles.blocks.tiles.TileDryingRack;
 import quarris.meretrifles.client.renderer.TileRendererDryingRack;
@@ -31,6 +33,7 @@ public class ClientRegistryHandler {
         }
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileDryingRack.class, new TileRendererDryingRack());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileTanningTub.class, new TileRendererTanningTub());
     }
 
     public static void registerModel(Item item, int meta, String variant) {

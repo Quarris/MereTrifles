@@ -43,8 +43,6 @@ public class GuiStill extends GuiContainer {
 
         this.inputFluidDisplay.draw();
         this.outputFluidDisplay.draw();
-        this.inputFluidDisplay.drawOverlay(mouseX, mouseY);
-        this.outputFluidDisplay.drawOverlay(mouseX, mouseY);
     }
 
     private int burnPixels() {
@@ -63,5 +61,7 @@ public class GuiStill extends GuiContainer {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
+        this.inputFluidDisplay.drawOverlay(mouseX, mouseY);
+        this.outputFluidDisplay.drawOverlay(mouseX, mouseY);
     }
 }

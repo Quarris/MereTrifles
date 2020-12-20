@@ -16,6 +16,18 @@ public class TileDryingRack extends TickableTile {
 
     public TileDryingRack() {
         this.inventory = new ItemStackHandler(1) {
+            @Nonnull
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                return ItemStack.EMPTY;
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+                return stack;
+            }
+
             @Override
             protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
                 return 1;

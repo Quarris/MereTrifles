@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import quarris.meretrifles.MereTrifles;
 import quarris.meretrifles.blocks.tiles.TileDryingRack;
 import quarris.meretrifles.helper.BlockRegistryObject;
@@ -53,11 +54,8 @@ public class BlockDryingRack extends BlockContainer implements ITileEntityProvid
         super(Material.WOOD);
         BlockRegistryObject.create(this)
                 .name("drying_rack")
-                .creativeTab(MereTrifles.creativeTab)
-                .soundType(SoundType.WOOD)
-                .harvestLevel("axe", 0)
-                .hardness(1)
-                .resistance(5)
+                .creativeTab(MereTrifles.creativeTab).soundType(SoundType.WOOD)
+                .harvestLevel("axe", 0).hardness(1).resistance(5)
                 .register();
     }
 
@@ -86,12 +84,15 @@ public class BlockDryingRack extends BlockContainer implements ITileEntityProvid
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileDryingRack) {
             TileDryingRack rack = (TileDryingRack) tile;
-            IItemHandler inventory = rack.getInventory();
+            ItemStackHandler inventory = rack.getInventory();
             ItemStack heldItem = player.getHeldItem(hand);
             if (inventory.getStackInSlot(0).isEmpty()) {
-                player.setHeldItem(hand, inventory.insertItem(0, heldItem, false));
+                inventory.setStackInSlot(0, heldItem.splitStack(1));
+                //player.setHeldItem(hand, inventory.insertItem(0, heldItem, false));
             } else {
-                player.addItemStackToInventory(inventory.extractItem(0, 1, false));
+                ItemStack extracted = inventory.getStackInSlot(0);
+                inventory.setStackInSlot(0, ItemStack.EMPTY);
+                player.addItemStackToInventory(extracted);
             }
             return true;
         }

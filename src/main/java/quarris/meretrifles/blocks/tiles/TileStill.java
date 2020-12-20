@@ -53,7 +53,20 @@ public class TileStill extends TickableTile {
                 this.recipe = RecipeStill.fromInput(this.world, this.pos, this.getInputFluid());
             }
 
-            this.tickTime(elapsed);
+            if (this.recipe != null) {
+                this.workTicks += elapsed;
+                if (this.workTicks >= this.recipe.getWorkTime()) {
+                    this.workTicks = 0;
+                    this.isActive = false;
+                }
+            }
+
+            if (this.fuelTicks > 0) {
+                this.fuelTicks -= elapsed;
+                if (this.fuelTicks < 0)
+                    this.fuelTicks = 0;
+            }
+
             return;
         }
 
@@ -149,6 +162,7 @@ public class TileStill extends TickableTile {
             this.workTicks += amount;
             if (this.workTicks > this.recipe.getWorkTime()) {
                 this.workTicks = 0;
+                this.isActive = false;
             }
         }
 

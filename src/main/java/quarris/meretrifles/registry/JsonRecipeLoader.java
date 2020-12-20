@@ -6,6 +6,7 @@ import quarris.meretrifles.MereTrifles;
 import quarris.meretrifles.recipe.IJsonRecipeLoader;
 import quarris.meretrifles.recipe.RecipeDryingRack;
 import quarris.meretrifles.recipe.RecipeStill;
+import quarris.meretrifles.recipe.RecipeTanningTub;
 
 import java.io.File;
 import java.io.FileReader;
@@ -25,6 +26,7 @@ public class JsonRecipeLoader {
 
         RECIPES_FILES.put("drying_rack", new RecipeDryingRack.RecipeLoader());
         RECIPES_FILES.put("still", new RecipeStill.RecipeLoader());
+        RECIPES_FILES.put("tanning_tub", new RecipeTanningTub.RecipeLoader());
     }
 
     public static File getModDir() {
